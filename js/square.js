@@ -1,40 +1,43 @@
 class Square {
-  constructor (root, isBlue, positionX, positionY) {
-      var width = 10;
-      var height = 10;
+  constructor(root, isBlue, positionX, positionY) {
+    this.width = 10;
+    this.height = 10;
 
-      var slide = new Slide(width, height, isBlue ? 'out' : 'in');
-      var l1 = new THREE.ImageLoader();
-      l1.setCrossOrigin('Anonymous');
-      slide.setImage(l1.load('https://s.graphiq.com/sites/default/files/2307/media/images/Dodger_Blue_429605_i0.png'));
+    var width = 10;
+    var height = 10;
 
-      slide.position.x = positionX;
-      slide.position.y = positionY;
-      root.scene.add(slide);
+    this.position = new THREE.Vector2(positionX, positionY);
 
-      var slide2 = new Slide(width, height, !isBlue ? 'out' : 'in');
-      var l2 = new THREE.ImageLoader();
-      l2.setCrossOrigin('Anonymous');
-      // slide2.setImage(l2.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/spring.jpg'));
-      slide2.position.x = positionX;
-      slide2.position.y = positionY;
+    var slide = new Slide(width, height, isBlue ? 'out' : 'in');
+    var l1 = new THREE.ImageLoader();
+    l1.setCrossOrigin('Anonymous');
+    slide.setImage(l1.load('https://s.graphiq.com/sites/default/files/2307/media/images/Dodger_Blue_429605_i0.png'));
+    slide.position.x = positionX / 10;
+    slide.position.y = positionY / 10;
+    root.scene.add(slide);
 
-      root.scene.add(slide2);
+    var slide2 = new Slide(width, height, !isBlue ? 'out' : 'in');
+    var l2 = new THREE.ImageLoader();
+    l2.setCrossOrigin('Anonymous');
+    slide2.setImage(l2.load('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Flag_of_Afghanistan_(1880%E2%80%931901).svg/2000px-Flag_of_Afghanistan_(1880%E2%80%931901).svg.png'));
+    slide2.position.x = positionX;
+    slide2.position.y = positionY;
+    root.scene.add(slide2);
 
-      this.tl = new TimelineMax({
-        repeat: 0,
-        paused: true,
-        yoyo: true
-      });
+    this.tl = new TimelineMax({
+      repeat: 0,
+      paused: true,
+      yoyo: true
+    });
 
-      this.tl.add(slide.transition(), 0);
-      this.tl.add(slide2.transition(), 0);
+    this.tl.add(slide.transition(), 0);
+    this.tl.add(slide2.transition(), 0);
 
   }
 
-  toggleSide () {
+  toggleSide() {
     var active = this.tl.play()._active;
-    if( !active ) {
+    if (!active) {
       this.tl.reverse();
     }
   }
@@ -193,20 +196,20 @@ function Slide(width, height, animationPhase) {
 Slide.prototype = Object.create(THREE.Mesh.prototype);
 Slide.prototype.constructor = Slide;
 Object.defineProperty(Slide.prototype, 'time', {
-  get: function () {
+  get: function() {
     return this.material.uniforms['uTime'].value;
   },
-  set: function (v) {
+  set: function(v) {
     this.material.uniforms['uTime'].value = v;
   }
 });
 
-Slide.prototype.setImage = function (image) {
+Slide.prototype.setImage = function(image) {
   this.material.uniforms.map.value.image = image;
   this.material.uniforms.map.value.needsUpdate = true;
 };
 
-Slide.prototype.transition = function () {
+Slide.prototype.transition = function() {
   return TweenMax.fromTo(this, 2.0, {
     time: 0.0
   }, {
@@ -221,7 +224,7 @@ function SlideGeometry(model) {
 }
 SlideGeometry.prototype = Object.create(THREE.BAS.ModelBufferGeometry.prototype);
 SlideGeometry.prototype.constructor = SlideGeometry;
-SlideGeometry.prototype.bufferPositions = function () {
+SlideGeometry.prototype.bufferPositions = function() {
   var positionBuffer = this.createAttribute('position', 3).array;
 
   for (var i = 0; i < this.faceCount; i++) {
